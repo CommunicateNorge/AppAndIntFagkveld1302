@@ -31,9 +31,13 @@ Go to portal.azure.com and click "create a resource" -> "function app"
  Right click project "TweetCheckerWorkflow" and chose "publish" do your newly created function app. 
  
  
- ### Step 3: Create web app service from the azure portal
+ ### Step 4: Create web app service from the azure portal
  
  Go to portal.azure.com and click "create a resource" -> "Web App".
+ 
  ![Overview](./resources/webapp.PNG)
  
 
+ ### Step 5: Build front end
+ 
+ 
