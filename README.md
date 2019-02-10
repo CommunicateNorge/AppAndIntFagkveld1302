@@ -1,4 +1,4 @@
-# Using azure durable functons apis
+# Using azure durable functions apis
 
 ## How To Run This Sample
 
