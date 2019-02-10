@@ -4,12 +4,11 @@ import InstanceList from './components/InstanceList'
 import Instance from './components/Instance'
 import './App.css';
 
-const REACT_APP_API_URL="http://localhost:7071";
+const REACT_APP_API_URL="<function app uri>";
+const FUNCTION_APP_KEY = "<funtion app key>"
 
 
 class InstanceManagerApp extends Component {
-
-
   constructor(props) {
     super(props);
     this.state = {
@@ -21,9 +20,7 @@ class InstanceManagerApp extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleSelectInstance = this.handleSelectInstance.bind(this);
     this.handleEventRasied = this.handleEventRasied.bind(this);
-
   }
-
 
   render() {
 
@@ -33,8 +30,6 @@ class InstanceManagerApp extends Component {
     } else if (!isLoaded) {
       return <div>Loading...</div>;
     } else {
-
-
       return (
         <div className="App">
           <div className="flex four">
@@ -98,7 +93,7 @@ class InstanceManagerApp extends Component {
     var updatedSelected = this.state.selected;
 
     updatedSelected.customStatus = "";
-    axios.post(REACT_APP_API_URL+'/runtime/webhooks/durabletask/instances/' + instance, { 'status': approved })
+    axios.post(REACT_APP_API_URL+'/runtime/webhooks/durabletask/instances/' + instance + "?code=" + FUNCTION_APP_KEY, { 'status': approved })
       .then(function (response) {
 
         this.setState({
@@ -116,7 +111,7 @@ class InstanceManagerApp extends Component {
 
   handleSelectInstance(param, e) {
 
-    fetch(REACT_APP_API_URL+"/runtime/webhooks/durabletask/instances/" + param + "?showHistory=true&customStatus")
+    fetch(REACT_APP_API_URL+"/runtime/webhooks/durabletask/instances/" + param + "?showHistory=true&customStatus&code=" + FUNCTION_APP_KEY)
       .then(res => res.json())
       .then(
         (result) => {
@@ -188,7 +183,7 @@ class InstanceManagerApp extends Component {
   componentDidMount() {
 
     console.log(process.env);
-    fetch(REACT_APP_API_URL+"/runtime/webhooks/durabletask/instances")
+    fetch(REACT_APP_API_URL+"/runtime/webhooks/durabletask/instances?code=" + FUNCTION_APP_KEY)
       .then(res => res.json())
       .then(
         (result) => {

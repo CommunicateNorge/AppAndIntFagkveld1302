@@ -7,7 +7,8 @@
   margin-left: auto;
   margin-right:  auto;
 
-  background: white;
+ 
+  background: rgba(76, 175, 80, 0.0)
 }
 
 body {
@@ -30,7 +31,8 @@ body {
   /* The image used */
   background-image: url('https://www.communicate.no/wp-content/uploads/2018/03/3137x1068_communicate_raskdigital_toppbilde.jpg');
   background-position: center;
- 
+  overflow: auto; 
+  height: 100%;
 
   background-size: cover;
 }
