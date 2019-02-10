@@ -1,4 +1,4 @@
-# Using azure durable functions apis and message hub
+# Using azure durable functions apis and message hub - Getting started
 
 
 ## Demo
@@ -86,5 +86,22 @@ Add function app URL and function key from step 3
   Open cors-filter on function app from step 2 and add url for front end web app
   
   
-  
+# Extending the sample 
+
+## Complete the workflow 
+
+We want to create workflow that allows end users to post messages that will end up as tweets.
+However: sometimes there can be useful with an extra set of eyes before tweets hit the internet.
+
+
+
+
+## Integrate with leagcy system using message hub from the workflow 
+
+
+## Extend the user interface 
+
+-Replay faild workflows 
+-More dynmic queries aginst api  
+
   
