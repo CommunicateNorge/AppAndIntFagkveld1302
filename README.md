@@ -93,7 +93,7 @@ Add function app URL and function key from step 3
 We want to create workflow that allows end users to post messages that will end up as tweets.
 However: sometimes there can be useful with an extra set of eyes before tweets hit the internet.
 
-
+![Workflow](./resources/workflow.png)
 
 
 ## Integrate with leagcy system using message hub from the workflow 
