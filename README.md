@@ -26,7 +26,7 @@ Go to portal.azure.com and click "create a resource" -> "function app"
      
  ### Step 3: Deploy workflow from visual studio 
  
- Open \startingpoint\workflow\TweetCheckerWorkflow\TweetCheckerWorkflow.sln in VS. 
+ Open /startingpoint/workflow/TweetCheckerWorkflow/TweetCheckerWorkflow.sln in VS. 
  
  Right click project "TweetCheckerWorkflow" and chose "publish" do your newly created function app. 
  
@@ -40,4 +40,41 @@ Go to portal.azure.com and click "create a resource" -> "function app"
 
  ### Step 5: Build front end
  
+ [Details](https://medium.com/@to_pe/deploying-create-react-app-on-microsoft-azure-c0f6686a4321)
  
+ Navigate to 
+ 
+ `cd /startingpoint/frontend/`
+ 
+ Open 
+ 
+  `cd ../src/App.js`
+
+```JavaScript
+const REACT_APP_API_URL="<insert function app host  e.g https://myfunctionap.azurewebsites.net/>";
+const FUNCTION_APP_KEY = "<insert function app key"
+```
+
+Add function app URL and function key from step 3
+ 
+ Install dependencies 
+ 
+  `npm install`
+  
+  Build for deploy
+  
+  `npm run-script build`
+ 
+  ### Step 6: Deploy frontend
+  
+  Go to Deployment Center-> ftp (take note of endpoint and password) from step 4.
+  
+  Upload all content from \build to site\wwwroot
+  
+  ### Step 7: Allow front end through cors filter 
+  
+  Open cors-filter on function app from step 2 and add url for front end web app
+  
+  
+  
+  
