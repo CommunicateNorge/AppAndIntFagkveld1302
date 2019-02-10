@@ -31,8 +31,8 @@ namespace TweetCheckerWorkflow.Model
         public String Text { get; set; }
 
 
-        [XmlElement(ElementName = "approved")]
-        [JsonProperty(PropertyName = "approved")]
+        [XmlElement(ElementName = "status")]
+        [JsonProperty(PropertyName = "status")]
         public  Status Status { get; set; }
 
 

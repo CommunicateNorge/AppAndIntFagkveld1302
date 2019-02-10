@@ -26,8 +26,11 @@ namespace TweetCheckerWorkflow
 
             if(message.RiskLevel>6)
             {
+                context.SetCustomStatus("WaitingForManualReviewCompleted");
                 message =  await context.WaitForExternalEvent<Message>("ManualReviewCompleted");
-            }else
+                context.SetCustomStatus("ManualReviewCompleted");
+            }
+            else
             {
                 message.Status = Status.Approved;
                 message.ApprovedBy = "robot";
@@ -36,9 +39,12 @@ namespace TweetCheckerWorkflow
             if(message.Status == Status.Approved)
             {
                 message = await context.CallActivityAsync<Message>("PublishTweet", message);
+                context.SetCustomStatus("PublishedTweet");
             }
 
-           return await context.CallActivityAsync<Message>("ArchiveTweet", message);
+            message = await context.CallActivityAsync<Message>("ArchiveTweet", message);
+            context.SetCustomStatus("ArchivedTweet");
+            return message;
         }
 
         [FunctionName("AssessRisk")]
@@ -77,9 +83,9 @@ namespace TweetCheckerWorkflow
         {
             // Function input comes from the request content.
 
-            var message = JsonConvert.DeserializeObject<Message>(await req.Content.ReadAsStringAsync());
+            var message =  JsonConvert.DeserializeObject<Message>(await req.Content.ReadAsStringAsync());
 
-            string instanceId = await starter.StartNewAsync("function", message);
+            string instanceId = await starter.StartNewAsync("Workflow", message);
 
             log.LogInformation($"Started orchestration with ID = '{instanceId}'.");
 
