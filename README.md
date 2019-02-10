@@ -1,6 +1,4 @@
-# Communicate fagkveld application and integration 13.02.2018
-
-## Using azure durable functons apis
+# Using azure durable functons apis
 
 ## How To Run This Sample
 
@@ -36,6 +34,6 @@ Go to portal.azure.com and click "create a resource" -> "function app"
  ### Step 3: Create web app service from the azure portal
  
  Go to portal.azure.com and click "create a resource" -> "Web App".
- 
+ ![Overview](./resources/webapp.PNG)
  
 
