@@ -23,3 +23,19 @@ From your shell or command line:
 
 Go to portal.azure.com and click "create a resource" -> "function app"
 
+![Overview](./resources/functionapp.PNG)
+
+     
+ ### Step 3: Deploy workflow from visual studio 
+ 
+ Open \startingpoint\workflow\TweetCheckerWorkflow\TweetCheckerWorkflow.sln in VS. 
+ 
+ Right click project "TweetCheckerWorkflow" and chose "publish" do your newly created function app. 
+ 
+ 
+ ### Step 3: Create web app service from the azure portal
+ 
+ Go to portal.azure.com and click "create a resource" -> "Web App".
+ 
+ 
+
