@@ -104,7 +104,16 @@ You need to extend each task.
 ### AssessRisk
 Use your imagination on how to asses the potential risk of a message hiting the internet.  
 
+### Review
+The human task of checking the message makes this workflow a long running workflow (ideal for durable functions). 
+There is not much to do in the code, but you should inspect how to the front end uses the web hook to notify the work flow engine.
 
+### PublishTweet
+TBA
+
+### ArchiveTweet
+
+TBA
 
 ## Integrate with legacy system using message hub from the workflow 
 
