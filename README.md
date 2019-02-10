@@ -95,8 +95,18 @@ However: sometimes there can be useful with an extra set of eyes before tweets h
 
 ![Workflow](./resources/workflow.png)
 
+Start of using /startingpoint/workflow/TweetCheckerWorkflow/TweetCheckerWorkflow.sln in VS.
 
-## Integrate with leagcy system using message hub from the workflow 
+You will notice functions with activity triggers that match the workflow above. 
+
+You need to extend each task. 
+
+### AssessRisk
+Use your imagination on how to asses the potential risk of a message hiting the internet.  
+
+
+
+## Integrate with legacy system using message hub from the workflow 
 
 
 ## Extend the user interface 
