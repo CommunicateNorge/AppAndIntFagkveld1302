@@ -101,26 +101,67 @@ You will notice functions with activity triggers that match the workflow above.
 
 You need to extend each task. 
 
+### Trigger workflow 
+
+You need to make the http-post start an durable orchestration.
+[See documentaion](https://docs.microsoft.com/en-us/azure/azure-functions/durable/durable-functions-concepts#c)
+
+```cSharp
+        [FunctionName("function_HttpStart")]
+        public static async Task<HttpResponseMessage> HttpStart(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")]HttpRequestMessage req,
+            ILogger log)
+        {
+            // Function input comes from the request content.
+
+            var message =  JsonConvert.DeserializeObject<Message>(await req.Content.ReadAsStringAsync());
+
+            /*   Start new workflow called "Workflow" 
+             *   return starter.CreateCheckStatusResponse(req, instanceId);
+             */
+
+            return new HttpResponseMessage();
+        }
+```
+
 ### AssessRisk
-Use your imagination on how to asses the potential risk of a message hiting the internet.  
+Make "AssessRisk" an [activity function](https://docs.microsoft.com/en-us/azure/azure-functions/durable/durable-functions-types-features-overview#activity-functions). 
+Bonus : Use your imagination on how to asses the potential risk of a message hiting the internet.  
 
 ### Review
 The human task of checking the message makes this workflow a long running workflow (ideal for durable functions). 
-There is not much to do in the code, but you should inspect how to the front end uses the web hook to notify the work flow engine.
+You set change the code so that execution halts until an external event called "ManualReviewCompleted" is raised. 
 
+```cSharp
+      if(message.RiskLevel>6)
+            {
+                context.SetCustomStatus("WaitingForManualReviewCompleted");
+                /*
+                 * Wait for external event :  "ManualReviewCompleted"
+                 */
+                context.SetCustomStatus("ManualReviewCompleted");
+            }
+```
+
+   
 ### PublishTweet
-TBA
+Make "PublishTweet" an [activity function](https://docs.microsoft.com/en-us/azure/azure-functions/durable/durable-functions-types-features-overview#activity-functions). 
+Further you will need to integrate with twitter and post the approved message. Keys and credentials will be provided. 
 
 ### ArchiveTweet
-
-TBA
-
-## Integrate with legacy system using message hub from the workflow 
+Make "ArchiveTweet" an [activity function](https://docs.microsoft.com/en-us/azure/azure-functions/durable/durable-functions-types-features-overview#activity-functions). 
+Further you will need to integrate with message hub and post the message. Keys and credentials will be provided.
 
 
-## Extend the user interface 
+## Create message hub integration 
+For archiving all messages we need to integrate with a legacy filing system that only proccess flat files in a archean file format from file share. 
+We will use "Message hub" allow us to set up this  integration. 
 
--Replay faild workflows 
--More dynmic queries aginst api  
+### Create "out bound"-Configuration 
+
+From the [dev-environment](https://portal-dev-app.azurewebsites.net/configurations) select "Add configuration".
+
+
+
 
   
