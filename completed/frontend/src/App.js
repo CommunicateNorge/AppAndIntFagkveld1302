@@ -4,8 +4,8 @@ import InstanceList from './components/InstanceList'
 import Instance from './components/Instance'
 import './App.css';
 
-const REACT_APP_API_URL="<function app uri>";
-const FUNCTION_APP_KEY = "<funtion app key>"
+const REACT_APP_API_URL="http://localhost:7071";
+const FUNCTION_APP_KEY = "<insert function key>"
 
 
 class InstanceManagerApp extends Component {
@@ -20,11 +20,12 @@ class InstanceManagerApp extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleSelectInstance = this.handleSelectInstance.bind(this);
     this.handleEventRasied = this.handleEventRasied.bind(this);
+    this.handleRewindInstance = this.handleRewindInstance.bind(this);
   }
 
   render() {
 
-    const { error, isLoaded, items, selected, handleSelectInstance, handleRaiseExernalEvent } = this.state;
+    const { error, isLoaded, items, selected, handleSelectInstance, handleRaiseExernalEvent,handleRewindInstance } = this.state;
     if (error) {
       return <div>Error: {error.message}</div>;
     } else if (!isLoaded) {
@@ -67,11 +68,12 @@ class InstanceManagerApp extends Component {
                 </footer>
               </article>
               <InstanceList items={items.filter(item => item.runtimeStatus === "Running")} title="Running workflows" selectInstance={this.handleSelectInstance}></InstanceList>
-              <InstanceList items={items.filter(item => item.runtimeStatus !== "Running")} title="Completed workflows" selectInstance={this.handleSelectInstance}></InstanceList>
+              <InstanceList items={items.filter(item => item.runtimeStatus === "Completed")} title="Completed workflows" selectInstance={this.handleSelectInstance}></InstanceList>
+              <InstanceList items={items.filter(item => item.runtimeStatus === "Failed")} title="Failed workflows" selectInstance={this.handleSelectInstance}></InstanceList>
             </div>
             <div class="two-third">
               {selected != null &&
-                <Instance item={selected} eventRaisedHandler={this.handleEventRasied}></Instance>
+                <Instance item={selected} eventRaisedHandler={this.handleEventRasied} rewindInstanceHandler={this.handleRewindInstance}></Instance>
               }
             </div>
           </div>
@@ -87,16 +89,30 @@ class InstanceManagerApp extends Component {
     }
   }
 
-  handleEventRasied(approved) {
+  handleRewindInstance() {
+
+    var instance = this.state.selected.instanceId;
+    var updatedSelected = this.state.selected;
+    updatedSelected.customStatus = "";
+    axios.post(REACT_APP_API_URL+'/runtime/webhooks/durabletask/instances/' + instance + "/rewind?reason=error&code=" + FUNCTION_APP_KEY)
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  handleEventRasied(status) {
 
     var instance = this.state.selected.instanceId + "/raiseEvent/ManualReviewCompleted";
     var updatedSelected = this.state.selected;
-
+    var self = this;
     updatedSelected.customStatus = "";
-    axios.post(REACT_APP_API_URL+'/runtime/webhooks/durabletask/instances/' + instance + "?code=" + FUNCTION_APP_KEY, { 'status': approved })
+    axios.post(REACT_APP_API_URL+'/runtime/webhooks/durabletask/instances/' + instance + "?code=" + FUNCTION_APP_KEY, { 'status': status, 'approvedBy' : "admin" })
       .then(function (response) {
 
-        this.setState({
+        self.setState({
           selected: updatedSelected
         });
 
@@ -107,11 +123,9 @@ class InstanceManagerApp extends Component {
       });
   }
 
-
-
   handleSelectInstance(param, e) {
-
-    fetch(REACT_APP_API_URL+"/runtime/webhooks/durabletask/instances/" + param + "?showHistory=true&customStatus&code=" + FUNCTION_APP_KEY)
+    
+    fetch(REACT_APP_API_URL+"/runtime/webhooks/durabletask/instances/" + param + "?showHistory=true&code=" + FUNCTION_APP_KEY)
       .then(res => res.json())
       .then(
         (result) => {

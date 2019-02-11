@@ -11,11 +11,16 @@ class Instance extends React.Component {
         super(props);
         this.raiseExernalEventApproved = this.raiseExernalEventApproved.bind(this);
         this.raiseExernalEventNotApproved = this.raiseExernalEventNotApproved.bind(this);
+        this.rewindInstance = this.rewindInstance.bind(this);
 
     }
 
     raiseExernalEventApproved() {
         this.props.eventRaisedHandler(2);
+    }
+
+    rewindInstance() {
+        this.props.rewindInstanceHandler();
     }
 
     raiseExernalEventNotApproved() {
@@ -30,23 +35,16 @@ class Instance extends React.Component {
                     <header>
                         <h3>{this.props.item.instanceId}</h3>
                     </header>
-                    {this.props.item.customStatus === 'WaitingForManualReviewCompleted' &&
-                        <form>
-                            <button onClick={this.raiseExernalEventApproved}>
-                                Approve message
-                    </button>
-                            <button onClick={this.raiseExernalEventNotApproved}>
-                                Reject message
-                    </button>
-
-                        </form>
-                    }
-
-
-
                     <fieldset class="flex one">
-
-                    
+                      { this.props.item.customStatus === 'WaitingForManualReviewCompleted' &&
+                        <button onClick={this.raiseExernalEventApproved}>Approve message</button>
+                      }
+                      { this.props.item.customStatus === 'WaitingForManualReviewCompleted' &&
+                         <button onClick={this.raiseExernalEventNotApproved}>Reject message</button> 
+                      }
+                        <button onClick={this.rewindInstance}>
+                                    Rewind instance
+                        </button>
                         <label><h4>InstanceId</h4> <input
                             id="InstanceId"
                             disabled="true"

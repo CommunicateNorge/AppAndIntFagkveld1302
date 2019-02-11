@@ -20,14 +20,14 @@ namespace TweetCheckerWorkflow
             var message = context.GetInput<Message>();
             var outputs = new List<string>();
 
-
-            // Replace "hello" with the name of your Durable Activity Function.
             message = await context.CallActivityAsync<Message>("AssessRisk", message);
 
             if(message.RiskLevel>6)
             {
                 context.SetCustomStatus("WaitingForManualReviewCompleted");
-                message =  await context.WaitForExternalEvent<Message>("ManualReviewCompleted");
+                /*
+                 * Wait for external event :  "ManualReviewCompleted"
+                 */
                 context.SetCustomStatus("ManualReviewCompleted");
             }
             else
@@ -48,7 +48,7 @@ namespace TweetCheckerWorkflow
         }
 
         [FunctionName("AssessRisk")]
-        public static Message AssessRisk([ActivityTrigger] Message message, ILogger log)
+        public static Message AssessRisk(Message message, ILogger log)
         {
             //Asses risk based on properties in the message and popluate message.RiskLevel with risk from 0-10. 10 being most risk. 
             message.RiskLevel = 10.0;
@@ -57,7 +57,7 @@ namespace TweetCheckerWorkflow
 
 
         [FunctionName("ArchiveTweet")]
-        public static Message ArchiveTweet([ActivityTrigger] Message message, ILogger log)
+        public static Message ArchiveTweet( Message message, ILogger log)
         {
             //Add message to ftp-server 
             message.Status = Status.SentToArchive;
@@ -66,7 +66,7 @@ namespace TweetCheckerWorkflow
 
 
         [FunctionName("PublishTweet")]
-        public static Message PublishTweet([ActivityTrigger] Message message, ILogger log)
+        public static Message PublishTweet( Message message, ILogger log)
         {
             //Post message to twittter
             message.Status = Status.Published;
@@ -78,18 +78,19 @@ namespace TweetCheckerWorkflow
         [FunctionName("function_HttpStart")]
         public static async Task<HttpResponseMessage> HttpStart(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")]HttpRequestMessage req,
-            [OrchestrationClient]DurableOrchestrationClient starter,
             ILogger log)
         {
             // Function input comes from the request content.
 
             var message =  JsonConvert.DeserializeObject<Message>(await req.Content.ReadAsStringAsync());
 
-            string instanceId = await starter.StartNewAsync("Workflow", message);
+            /*   Start new workflow called "Workflow" 
+             *   return starter.CreateCheckStatusResponse(req, instanceId);
+             */
 
-            log.LogInformation($"Started orchestration with ID = '{instanceId}'.");
-
-            return starter.CreateCheckStatusResponse(req, instanceId);
+            return new HttpResponseMessage();
         }
     }
 }
+ 
+ 
