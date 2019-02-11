@@ -88,7 +88,22 @@ Add function app URL and function key from step 3
   
 # Extending the sample 
 
-## Complete the workflow 
+## Create message hub integration 
+For archiving all messages we need to integrate with a legacy filing system that only proccess flat files in a archean file format from file share. 
+We will use "Message hub" allow us to set up this  integration. 
+
+### Create "mapper"
+
+Create a [dll-map](https://communicateno.atlassian.net/wiki/spaces/CMH/pages/150044794/On+Off-Boarding#On/Off-Boarding-Boarding-OutboundConfiguration(Mandatory)) or use provided xxx.dll to convert from json to flat file. 
+
+When completed use the [upload function] ( https://portal-dev-app.azurewebsites.net/codemappings) to make it available for your integrations 
+
+### Create "out bound"-Configuration 
+
+From the [dev-environment](https://portal-dev-app.azurewebsites.net/configurations) select "Add configuration".
+
+
+## Complete the azure workflow 
 
 We want to create workflow that allows end users to post messages that will end up as tweets.
 However: sometimes there can be useful with an extra set of eyes before tweets hit the internet.
@@ -150,18 +165,11 @@ Further you will need to integrate with twitter and post the approved message. K
 
 ### ArchiveTweet
 Make "ArchiveTweet" an [activity function](https://docs.microsoft.com/en-us/azure/azure-functions/durable/durable-functions-types-features-overview#activity-functions). 
-Further you will need to integrate with message hub and post the message. Keys and credentials will be provided.
+Further you need to integrate with the message hub "outbound"-config creaated earlier. Keys and credentials will be provided.
 
+## Extend front end 
 
-## Create message hub integration 
-For archiving all messages we need to integrate with a legacy filing system that only proccess flat files in a archean file format from file share. 
-We will use "Message hub" allow us to set up this  integration. 
-
-### Create "out bound"-Configuration 
-
-From the [dev-environment](https://portal-dev-app.azurewebsites.net/configurations) select "Add configuration".
-
-
+### Add support for "rewinding" instances 
 
 
   
