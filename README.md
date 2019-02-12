@@ -207,5 +207,12 @@ Further you need to integrate with the message hub "outbound"-config creaated ea
 
 ### Add support for "rewinding" instances 
 
+The "rewinding"-button does nothing in the current UI. Use the [api reference](https://docs.microsoft.com/en-us/azure/azure-functions/durable/durable-functions-http-api) to figure out how to fix that. 
+
+### Create a more dynamic UI 
+
+The current UI does not poll the function api for new instance status ( you need to refresh the site in order to get updates). 
+Figure out how to make the app more dynamic. 
+
 
   
