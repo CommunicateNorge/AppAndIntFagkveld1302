@@ -7,10 +7,21 @@
 
 ## Overview 
 
-This sample uses an simple [react single page application](https://reactjs.org/) to interact with a workflow implemented as [azure durable function](https://docs.microsoft.com/en-us/azure/azure-functions/durable/durable-functions-overview) and the built in [durable api](https://docs.microsoft.com/en-us/azure/azure-functions/durable/durable-functions-http-api). 
+We want to create workflow that allows end users to post messages that will end up as tweets.
+However: sometimes it can be useful with an extra set of eyes before tweets hit the internet.
+
+A simple workflow is implemented [azure durable function](https://docs.microsoft.com/en-us/azure/azure-functions/durable/durable-functions-overview) (AppAndIntFagkveld1302\completed\workflow\TweetCheckerWorkflow) where users can post messages to the http-endpoint api/function_HttpStart.
+Messages are automatically evaluated. If there Is an risk, due to the content of message, they must approved by an admin. 
+
+All messages, both approved and rejected, are archived in a filing system. 
+The UI (AppAndIntFagkveld1302\completed\frontend) were users can post messages and approve messages is an [react single page application](https://reactjs.org/).
+The integration between the workflow and the filing system is implemented as an [Message hub]( https://communicateno.atlassian.net/wiki/spaces/CMH/pages/150241410/Documentation+Message+Hub) outbound configuration. 
 
 
-## How To Run This Sample on Azure
+
+
+
+## How To Run This Sample on Azure (Optional)
 
 To run this sample, you'll need:
 
@@ -100,12 +111,17 @@ git push origin mygroupbranch
 </pre>
 
 ## Create message hub integration 
-For archiving all messages we need to integrate with a legacy filing system that only proccess flat files in a archean file format from file share. 
-We will use "Message hub" allow us to set up this  integration. 
+For archiving all messages we need to integrate with a legacy filing system that only proccess comma separated flat files placed in correct directory on a file server.
+We will use ["Message hub"](https://communicateno.atlassian.net/wiki/spaces/CMH/pages/150241410/Documentation+Message+Hub)to set up this  integration. 
 
 ### Create "mapper" (optional)
 
-Create a [dll-map](https://communicateno.atlassian.net/wiki/spaces/CMH/pages/150044794/On+Off-Boarding#On/Off-Boarding-Boarding-OutboundConfiguration(Mandatory)) or use provided xxx.dll to convert from json to flat file. 
+Create a [dll-map](https://communicateno.atlassian.net/wiki/spaces/CMH/pages/150044794/On+Off-Boarding#On/Off-Boarding-Boarding-OutboundConfiguration(Mandatory)). 
+
+Convert the json message to the following csv-file 
+<pre>
+created;from;text;status;approvedBy
+</pre>
 
 When completed use the [upload function] ( https://portal-dev-app.azurewebsites.net/codemappings) to make it available for your integration configuration
 
@@ -113,22 +129,25 @@ When completed use the [upload function] ( https://portal-dev-app.azurewebsites.
 
 You will create a "out bound"-configuration that will transform messages posted into message hub from the workflow and place them on a ftp-server.
 From the [dev-environment](https://portal-dev-app.azurewebsites.net/configurations) select "Add configuration".
-
+<pre>
 ReceiverID : filingsystem{your group number} 
 SenderId : tweetchecker{your group number} 
 DocumentType : Tweet{your group number}
-
+</pre>
 
 #### Adapter Type
+
+<pre>
 sftp 
 Connection Url : 77.88.107.42
 Username : Fagsamling 
 Password : <Credentials will be provided during the presentation>
 Sftp Directory : your group (e.g group2)
+</pre>
 
 ### Mapping
 
-Message Transformation Outbound Sas Uri : Use the mapper you created in "Create  mapper" or use TweetMapper(provided)
+Message Transformation Outbound Sas Uri : Use the mapper you created in "Create  mapper" or use MessageMap.dll. This mapping should already exists with sas uri https://cmhdevdllblb.blob.core.windows.net/dllfiles/MessageMap.dll?sv=2018-03-28&sr=b&sig=v3U0%2FHsMlPLLl7cc1Lh2sstQGT2HpnvAyR4dDYb7QP4%3D&st=2019-02-12T22%3A10%3A19Z&se=2024-02-11T22%3A25%3A19Z&sp=r
 
 ### Test the "out bound"-Configuration 
 
@@ -151,9 +170,6 @@ With body
 Veify that the message gets mapped and placed in correct folder on the ftp-server.      
 
 ## Complete the azure workflow 
-
-We want to create workflow that allows end users to post messages that will end up as tweets.
-However: sometimes there can be useful with an extra set of eyes before tweets hit the internet.
 
 ![Workflow](./resources/workflow.png)
 
