@@ -10,7 +10,7 @@
 This sample uses an simple [react single page application](https://reactjs.org/) to interact with a workflow implemented as [azure durable function](https://docs.microsoft.com/en-us/azure/azure-functions/durable/durable-functions-overview) and the built in [durable api](https://docs.microsoft.com/en-us/azure/azure-functions/durable/durable-functions-http-api). 
 
 
-## How To Run This Sample
+## How To Run This Sample on Azure
 
 To run this sample, you'll need:
 
