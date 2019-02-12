@@ -88,6 +88,16 @@ Add function app URL and function key from step 3
   
 # Extending the sample 
 
+The /startingpoint needs some work. The follwing section describes how to play around to get a working example running. 
+
+You should create branch for your group. This makes it a easier to collaborate.  
+
+From your shell or command line:
+
+`git clone https://github.com/CommunicateNorge/AppAndIntFagkveld1302.git`
+`git checkout -b mygroupbranch`
+`git push origin mygroupbranch`
+
 ## Create message hub integration 
 For archiving all messages we need to integrate with a legacy filing system that only proccess flat files in a archean file format from file share. 
 We will use "Message hub" allow us to set up this  integration. 
