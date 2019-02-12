@@ -126,7 +126,7 @@ Username : Fagsamling
 Password : <Credentials will be provided during the presentation>
 Sftp Directory : your group (e.g group2)
 
-### Mappnig
+### Mapping
 
 Message Transformation Outbound Sas Uri : Use the mapper you created in "Create  mapper" or use TweetMapper(provided)
 
