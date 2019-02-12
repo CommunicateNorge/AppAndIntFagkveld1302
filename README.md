@@ -24,7 +24,7 @@ To run this sample, you'll need:
 
 From your shell or command line:
 
-`https://github.com/CommunicateNorge/AppAndIntFagkveld1302.git`
+`git clone https://github.com/CommunicateNorge/AppAndIntFagkveld1302.git`
 > Given that the name of the sample is pretty long, and so are the name of the referenced NuGet pacakges, you might want to clone it in a folder close to the root of your hard drive, to avoid file size limitations on Windows.
 
 ### Step 2:  Create a azure function app from the azure portal
@@ -92,16 +92,52 @@ Add function app URL and function key from step 3
 For archiving all messages we need to integrate with a legacy filing system that only proccess flat files in a archean file format from file share. 
 We will use "Message hub" allow us to set up this  integration. 
 
-### Create "mapper"
+### Create "mapper" (optional)
 
 Create a [dll-map](https://communicateno.atlassian.net/wiki/spaces/CMH/pages/150044794/On+Off-Boarding#On/Off-Boarding-Boarding-OutboundConfiguration(Mandatory)) or use provided xxx.dll to convert from json to flat file. 
 
-When completed use the [upload function] ( https://portal-dev-app.azurewebsites.net/codemappings) to make it available for your integrations 
+When completed use the [upload function] ( https://portal-dev-app.azurewebsites.net/codemappings) to make it available for your integration configuration
 
 ### Create "out bound"-Configuration 
 
+You will create a "out bound"-configuration that will transform messages posted into message hub from the workflow and place them on a ftp-server.
 From the [dev-environment](https://portal-dev-app.azurewebsites.net/configurations) select "Add configuration".
 
+ReceiverID : filingsystem{your group number} 
+SenderId : tweetchecker{your group number} 
+DocumentType : Tweet{your group number}
+
+
+#### Adapter Type
+sftp 
+Connection Url : 77.88.107.42
+Username : Fagsamling 
+Password : <Credentials will be provided during the presentation>
+Sftp Directory : your group (e.g group2)
+
+### Mappnig
+
+Message Transformation Outbound Sas Uri : Use the mapper you created in "Create  mapper" or use TweetMapper(provided)
+
+### Test the "out bound"-Configuration 
+
+Post a message to 
+
+`https://cmh-dev-transactionhandler-fa.azurewebsites.net/api/TransactionHandler?code=GxCLHO55vkN7NI/tCa1vlj3RiYbLAcxE89ZdygjlRBtsksRmRnFN2A==&SenderId=tweetchecker{your group number} &ReceiverID=filingsystem{your group number}&DocumentType=Tweet{your group number}&MessageFormat=json&MessageEncoding=utf-8`
+
+With body 
+
+```JavaScript
+{
+   "created" : "2019-02-12",
+   "from" : "me",
+   "text" : "text",
+   "status" 1,
+   "approvedBy" : "him"
+}
+```
+
+Veify that the message gets mapped and placed in correct folder on the ftp-server.      
 
 ## Complete the azure workflow 
 
