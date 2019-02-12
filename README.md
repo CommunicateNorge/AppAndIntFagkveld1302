@@ -94,9 +94,9 @@ You should create branch for your group. This makes it a easier to collaborate.
 
 From your shell or command line:
 
-`git clone https://github.com/CommunicateNorge/AppAndIntFagkveld1302.git`
-`git checkout -b mygroupbranch`
-`git push origin mygroupbranch`
+`git clone https://github.com/CommunicateNorge/AppAndIntFagkveld1302.git
+git checkout -b mygroupbranch
+git push origin mygroupbranch`
 
 ## Create message hub integration 
 For archiving all messages we need to integrate with a legacy filing system that only proccess flat files in a archean file format from file share. 
