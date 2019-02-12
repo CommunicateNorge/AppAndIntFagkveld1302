@@ -7,11 +7,15 @@
 
 ## Overview 
 
+![Workflow](./resources/highlevel.png)
+
 We want to create workflow that allows end users to post messages that will end up as tweets.
 However: sometimes it can be useful with an extra set of eyes before tweets hit the internet.
 
 A simple workflow is implemented [azure durable function](https://docs.microsoft.com/en-us/azure/azure-functions/durable/durable-functions-overview) (AppAndIntFagkveld1302\completed\workflow\TweetCheckerWorkflow) where users can post messages to the http-endpoint api/function_HttpStart.
 Messages are automatically evaluated. If there Is an risk, due to the content of message, they must approved by an admin. 
+
+![Workflow](./resources/workflow.png)
 
 All messages, both approved and rejected, are archived in a filing system. 
 The UI (AppAndIntFagkveld1302\completed\frontend) were users can post messages and approve messages is an [react single page application](https://reactjs.org/).
@@ -47,7 +51,7 @@ Go to portal.azure.com and click "create a resource" -> "function app"
      
  ### Step 3: Deploy workflow from visual studio 
  
- Open /startingpoint/workflow/TweetCheckerWorkflow/TweetCheckerWorkflow.sln in VS. 
+ Open /completed/workflow/TweetCheckerWorkflow/TweetCheckerWorkflow.sln in VS. 
  
  Right click project "TweetCheckerWorkflow" and chose "publish" do your newly created function app. 
  
@@ -65,7 +69,7 @@ Go to portal.azure.com and click "create a resource" -> "function app"
  
  Navigate to 
  
- `cd /startingpoint/frontend/`
+ `cd /completed/frontend/`
  
  Open 
  
@@ -97,9 +101,9 @@ Add function app URL and function key from step 3
   Open cors-filter on function app from step 2 and add url for front end web app
   
   
-# Extending the sample 
+# Fix the "starting point" 
 
-The /startingpoint needs some work. The follwing section describes how to play around to get a working example running. 
+The /startingpoint-projects needs some work to work as intended. The follwing section describes how to play around to get a working example running. 
 
 You should create branch for your group. This makes it a easier to collaborate.  
 
