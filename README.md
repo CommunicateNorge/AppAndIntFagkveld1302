@@ -48,22 +48,40 @@ Go to portal.azure.com and click "create a resource" -> "function app"
 
 ![Overview](./resources/functionapp.PNG)
 
+### Step 3 : Add twitter creds to code 
+
+You need to update replace these values with provided credentials 
+```cSharp
+
+   [FunctionName("PublishTweet")]
+        public static Message PublishTweet([ActivityTrigger] Message message, ILogger log)
+        {
+            //Post message to twittter
+
+            var twitter = new TwitterApi("<Insert ConsumerKey>", "<Insert ConsumerKeySecret>", "<Insert AccessToken>", "<Insert     AccessTokenSecret>");
+            var response = twitter.Tweet(message.Text).Result;
+
+            message.Status = Status.Published;
+
+            return message; 
+        }
+```
      
- ### Step 3: Deploy workflow from visual studio 
+ ### Step 4: Deploy workflow from visual studio 
  
  Open /completed/workflow/TweetCheckerWorkflow/TweetCheckerWorkflow.sln in VS. 
  
  Right click project "TweetCheckerWorkflow" and chose "publish" do your newly created function app. 
  
  
- ### Step 4: Create web app service from the azure portal
+ ### Step 5: Create web app service from the azure portal
  
  Go to portal.azure.com and click "create a resource" -> "Web App".
  
  ![Overview](./resources/webapp.PNG)
  
 
- ### Step 5: Build front end
+ ### Step 6: Build front end
  
  [Details](https://medium.com/@to_pe/deploying-create-react-app-on-microsoft-azure-c0f6686a4321)
  
@@ -90,16 +108,25 @@ Add function app URL and function key from step 3
   
   `npm run-script build`
  
-  ### Step 6: Deploy frontend
+  ### Step 7: Deploy frontend
   
   Go to Deployment Center-> ftp (take note of endpoint and password) from step 4.
   
   Upload all content from \build to site\wwwroot
   
-  ### Step 7: Allow front end through cors filter 
+  ### Step 8: Allow front end through cors filter 
   
   Open cors-filter on function app from step 2 and add url for front end web app
   
+## How To Run This Sample locally
+
+Follow the steps in "How To Run This Sample on Azure" without steps related to azure. 
+You can run the workflow from visual studio. Cors is all ready enabled for localhost and it is using UseDevelopmentStorage=true.
+
+To run the front end ; point REACT_APP_API_URL to http://localhost:7071 ( you don't need function key). 
+Start the app by running "npm start" from your terminal. 
+
+and the front end by running npm start
   
 # Fix the "starting point" 
 
