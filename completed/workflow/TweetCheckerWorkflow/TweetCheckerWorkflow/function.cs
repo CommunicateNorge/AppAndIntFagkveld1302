@@ -93,7 +93,7 @@ namespace TweetCheckerWorkflow
         {
             //Post message to twittter
 
-            var twitter = new TwitterApi("WSgc2EQ3sD9qPyH4EvvCrlac0", "izrANW9Um0HLQG9Iuq7O7Tp7cYigkj9lt0gKL3FqfKFBclsjjl", "1095592890007461888-0GsFNhn66HediV8H6UNrleCop0VTuO", "1kEQS69pA359j0C1Do9Lkrj4MEXZLPYeOWDDWWge4Gjhu");
+            var twitter = new TwitterApi("<Insert ConsumerKey>", "<Insert ConsumerKeySecret>", "<Insert AccessToken>", "<Insert AccessTokenSecret>");
             var response = twitter.Tweet(message.Text).Result;
 
             message.Status = Status.Published;
