@@ -4,7 +4,7 @@ import InstanceList from './components/InstanceList'
 import Instance from './components/Instance'
 import './App.css';
 
-const REACT_APP_API_URL="http://localhost:7071";
+const REACT_APP_API_URL="https://tweetcheckerworkflow.azurewebsites.net";
 const FUNCTION_APP_KEY = "<insert function key>"
 
 
@@ -167,7 +167,7 @@ class InstanceManagerApp extends Component {
     }
     const newInstnace = {
       text: this.state.text,
-      poster: this.state.poster,
+      from: this.state.poster,
       runtimeStatus : "Running"
     };
 

@@ -28,7 +28,9 @@ namespace TweetCheckerWorkflow
             if(message.RiskLevel>6)
             {
                 context.SetCustomStatus("WaitingForManualReviewCompleted");
-                message =  await context.WaitForExternalEvent<Message>("ManualReviewCompleted");
+                var update =  await context.WaitForExternalEvent<Message>("ManualReviewCompleted");
+                message.ApprovedBy = update.ApprovedBy;
+                message.Status = update.Status;
                 context.SetCustomStatus("ManualReviewCompleted");
             }
             else
