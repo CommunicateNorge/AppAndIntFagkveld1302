@@ -7,6 +7,7 @@ using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using TweetCheckerWorkflow.Model;
+using RestSharp;
 
 namespace TweetCheckerWorkflow
 {
@@ -50,8 +51,16 @@ namespace TweetCheckerWorkflow
         [FunctionName("AssessRisk")]
         public static Message AssessRisk([ActivityTrigger] Message message, ILogger log)
         {
-            //Asses risk based on properties in the message and popluate message.RiskLevel with risk from 0-10. 10 being most risk. 
-            message.RiskLevel = 10.0;
+            //Asses risk based on properties in the message and popluate message.RiskLevel with risk from 0-10. 10 being most risk.
+            if(message.Text.ToLower().Contains("donald") || message.Text.ToLower().Contains("trump"))
+            {
+                message.RiskLevel = 10.0;
+            }
+            else
+            {
+                message.RiskLevel = 5.0;
+            }
+
             return message; 
         }
 
@@ -59,8 +68,20 @@ namespace TweetCheckerWorkflow
         [FunctionName("ArchiveTweet")]
         public static Message ArchiveTweet([ActivityTrigger] Message message, ILogger log)
         {
-            //Add message to ftp-server 
+            var client = new RestClient("https://cmh-dev-transactionhandler-fa.azurewebsites.net/api/TransactionHandler?code=GxCLHO55vkN7NI/tCa1vlj3RiYbLAcxE89ZdygjlRBtsksRmRnFN2A==&SenderId=tweetchecker&ReceiverID=filingsystem&DocumentType=Tweet&MessageFormat=json&MessageEncoding=utf-8");
+            var request = new RestRequest(Method.POST);
+            
+            request.AddJsonBody(message);
+
+            var response = client.Execute(request);        
+            
+            if(!response.IsSuccessful)
+            {
+                throw new System.Exception("Something went wrong..", response.ErrorException);
+            }
+            
             message.Status = Status.SentToArchive;
+
             return message;
         }
 
@@ -69,6 +90,10 @@ namespace TweetCheckerWorkflow
         public static Message PublishTweet([ActivityTrigger] Message message, ILogger log)
         {
             //Post message to twittter
+
+            var twitter = new TwitterApi("WSgc2EQ3sD9qPyH4EvvCrlac0", "izrANW9Um0HLQG9Iuq7O7Tp7cYigkj9lt0gKL3FqfKFBclsjjl", "1095592890007461888-0GsFNhn66HediV8H6UNrleCop0VTuO", "1kEQS69pA359j0C1Do9Lkrj4MEXZLPYeOWDDWWge4Gjhu");
+            var response = twitter.Tweet(message.Text).Result;
+
             message.Status = Status.Published;
 
             return message; 
